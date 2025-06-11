@@ -27,6 +27,14 @@ jobs:
         run: |
           cd helpdesk-page
           npm install
+      
+      - name: Install live-server
+        run: npm install -g live-server
+
+      - name: Start frontend with live-server
+        run: |
+          live-server ./helpdesk-page --port=5500 --no-browser &
+          sleep 5
 
       - name: Start application in background
         run: |
