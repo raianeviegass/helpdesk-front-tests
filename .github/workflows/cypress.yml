@@ -35,9 +35,6 @@ jobs:
         env:
           CI: true
 
-      - name: Wait for app to be available
-        run: npx wait-on http://localhost:3000
-
       - name: Install test dependencies
         run: npm install
 
