@@ -161,13 +161,25 @@ Foi criado o arquivo `cypress.yml` para configuração da pipeline de execução
 Abaixo você verá a configuração básica padrão que dispara a execução deles na nuvem a cada push que é realizado no projeto:
 
 ```yml
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+  name: Cypress Tests
+
+  on:
+    push:
+      branches:
+        - main
+    pull_request:
+      branches:
+        - main
+
+  jobs:
+    cypress:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Check out tests repository
+          uses: actions/checkout@v2
+
+        - name: Clone application repository
+          run: git clone https://github.com/automacaohml/helpdesk-page.git
 ```
 
 ## Acessando o Relatório de Testes gerado

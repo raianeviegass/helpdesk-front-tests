@@ -95,11 +95,6 @@ class UsuariosPage {
     return this
   }
 
- irParaTicketPage() {
-    cy.get('nav#navbar').contains('a', 'Tickets').click()
-    return ticketsPage
-  }
-
 }
 
 export default new UsuariosPage()

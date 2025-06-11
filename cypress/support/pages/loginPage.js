@@ -25,12 +25,6 @@ class LoginPage {
     return usuariosPage
   }
 
-  voltarHomePage() {
-    cy.get('#undefined').should('be.visible').and('contain.text', 'Continuar navegando')
-    cy.get('#undefined').click()
-    return homePage
-  }
-
 }
 
 export default new LoginPage()
