@@ -10,7 +10,7 @@ describe('Suite de Teste que realiza a busca e exclusão de tickets', () => {
       .verificarTicketsPorStatus()
   })
 
-  it.only('Deve acessar a página de Tickets, selecionar o botão de exclusão de um dos Tickets e validar que o respesctivo Ticket foi excluído com sucesso', () => {
+  it('Deve acessar a página de Tickets, selecionar o botão de exclusão de um dos Tickets e validar que o respesctivo Ticket foi excluído com sucesso', () => {
     ticketsPage
       .visit()
       .excluirTicket('The printer is not printing.')
