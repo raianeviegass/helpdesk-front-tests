@@ -7,14 +7,16 @@ Neste projeto eu utilizei o **Cypress** para automatizar os testes de uma aplica
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Estratégia de Testes](#estrategia-de-testes)
 - [Pré-requisitos](#pré-requisitos)
 - [Clone do repositório para o ambiente local](#clone-do-repositorio-para-o-ambiente-local)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Configuração](#configuração)
-- [Exemplo de Teste com Fluent Pages](#exemplo-de-teste-com-fluent-pages)
+- [Exemplo de Teste com Page Object e Fluent Pages](#exemplo-de-teste-com-page-object-e-fluent-pages)
 - [Rodando os Testes localmente](#rodando-os-testes-localmente)
 - [Rodando os Testes na Pipeline do Github](#rodando-os-testes-na-pipeline-do-github)
 - [Acessando o Relatório de Testes gerado](#acessando-o-relatório-de-testes-gerado)
+- [Alguns pontos de melhorias](#alguns-pontos-de-melhorias)
 
 ## Sobre o Projeto
 
@@ -22,9 +24,9 @@ Neste projeto eu quis demonstrar como utilizar o Cypress com o padrão Page Obje
 
 ## Tecnologias Utilizadas
 
-- **Cypress**: Framework de testes end-to-end.
-- **Page Object Model (POM)**: Padrão de design para estruturar os testes, isolando interações com a interface em classes específicas.
-- **Fluent Pages**: Uma variação do padrão POM que permite escrever interações de forma encadeada (fluent), proporcionando um código mais limpo e legível.
+- **Cypress**
+- **Mochawesome**
+- **CI/CD utilizando Github Actions**
 
 ## Estratégia de Testes
 
@@ -34,14 +36,9 @@ Neste projeto eu quis demonstrar como utilizar o Cypress com o padrão Page Obje
 
 ## Pré-requisitos
 
-Antes de começar, é necessário ter o **Node.js** e o **Cypress** instalados. Para instalar o Cypress, siga os passos abaixo:
+Antes de começar, é necessário ter o **Node.js** instalado.
 
 1. Instale o [Node.js](https://nodejs.org/)
-2. Instale o Cypress utilizando o seguinte comando pelo terminal:
-
-   ```bash
-   npm install cypress --save-dev
-   ```
 
 ## Clone do repositório para o ambiente local
 
@@ -49,6 +46,7 @@ Antes de começar, é necessário ter o **Node.js** e o **Cypress** instalados. 
 
    ```bash
    git clone https://github.com/raianeviegass/helpdesk-front-tests
+   cd helpdesk-front-tests
    ```
 2. Instale as dependências utilizando o seguinte comando pelo terminal:
    ```bash
@@ -59,51 +57,17 @@ Antes de começar, é necessário ter o **Node.js** e o **Cypress** instalados. 
 ```bash
 /cypress
   /e2e
-    /ticketCard.js                           # Testes relacionados à página de Tickets
-    /userCard.js                             # Testes relacionados à página de Usuários
+    /ticketCard.js                         
+    /userCard.js                             
   /support                                  
-    /pages                                   # Páginas com objetos Page Object e Fluent Pages
-        /cadastroPage.js                     # Classe com métodos Fluent para a Página de Cadastro de usuário
-        /loginPage.js                        # Classe com métodos Fluent para a Página de Login       
-        /ticketsPage.js                      # Classe com métodos Fluent para a Página de Sucesso do envio de Tickets
-        /usuariosPage.js                     # Classe com métodos Fluent para a Página de Sucesso do envio de Usuários     
-    /commands.js                             # Comandos customizados do Cypress
-    /e2e.js                                  # Configuração inicial do Cypress
+    /pages                                   
+        /cadastroPage.js                     
+        /loginPage.js                              
+        /ticketsPage.js                      
+        /usuariosPage.js                         
+    /commands.js                             
+    /e2e.js                                  
 ```
-
-## Exemplo de Teste com Fluent Pages
-
-
-**Estrutura da Página de Cadstro de Usuário**
-
-```javascript     
-    import loginPage from './loginPage'
-
-    class CadastroPage {
-      visit() {
-        cy.visit('/view/signUp.html')
-        cy.url().should('include', '/signUp.html');
-        return this
-      }
-    }
-  ```
-
-**Teste de Cadastro de Usuário**
-
-```javascript     
-    import cadastroPage from '../support/pages/cadastroPage'
-    import loginPage from '../support/pages/loginPage'
-    import usuariosPage from '../support/pages/usuariosPage'
-    import ticketsPage from '../support/pages/ticketsPage'
-
-      it('Deve acessar a página de Cadastro de Usuário, preencher o formulário, submeter o formulário, e validar o redirecionamento para Página de Login', () => {
-        cadastroPage
-          .visit()
-          .preencherFormulario('Catarina Silvana', 'catarina-rodrigues@powerblade.com.br', '65761040816')
-          .submeterFormulario()
-          .loginPageEstaVisivel()      
-      })
-  ```
 
 ## Configuração
 
@@ -124,7 +88,7 @@ module.exports = defineConfig({
   })
 ```
 
-## Configuração de geração de Relatório dos Testes
+**Configuração de geração de Relatório dos Testes**
 
 Foi adicionado a este projeto uma geração automática de relatórios dos testes usando **Mochawesome**, e ele é gerado no final de toda a execução.
 Esta configuração é feita no arquivo `cypress.config.js`, conforme exemplo abaixo:
@@ -141,6 +105,39 @@ Esta configuração é feita no arquivo `cypress.config.js`, conforme exemplo ab
   }
 }
 ```
+
+## Exemplo de Teste com Page Object e Fluent Pages
+
+
+**Estrutura da Página de Cadstro de Usuário**
+
+```javascript     
+    import loginPage from './loginPage'
+
+    class CadastroPage {
+      submeterFormulario() {
+        cy.contains('button', 'Cadastrar').should('be.visible').click()
+        return loginPage
+      }
+    }
+  ```
+
+**Teste de Cadastro de Usuário**
+
+```javascript     
+    import cadastroPage from '../support/pages/cadastroPage'
+    import loginPage from '../support/pages/loginPage'
+    import usuariosPage from '../support/pages/usuariosPage'
+    import ticketsPage from '../support/pages/ticketsPage'
+
+      it('Deve acessar a página de Cadastro de Usuário, preencher o formulário, submeter o formulário, e validar o redirecionamento para Página de Login', () => {
+        cadastroPage
+          .visit()
+          .preencherFormulario('Catarina Silvana', 'catarina-rodrigues@powerblade.com.br', '65761040816')
+          .submeterFormulario()
+          .loginPageEstaVisivel()      
+      })
+  ```
 
 ## Rodando os Testes localmente
 
@@ -216,3 +213,14 @@ Abaixo você verá a configuração básica padrão que dispara a execução del
 
  **Modo Pipeline** (Novas execuções):
     Conforme informado na sessão - [Rodando os Testes na Pipeline do Github](#rodando-os-testes-na-pipeline-do-github), basta realizar um push para o projeto. após cloná-lo para seu ambiente local, confome orientado na sessão - [Clone do repositório para o ambiente local](#clone-do-repositorio-para-o-ambiente-local) e acessar a execução da pipeline de testes seguindo os passos informados no passo **Modo Pipeline** (Execuções já realizadas), assim como o Relatório de testes gerado.
+
+  
+## Alguns pontos de melhorias:
+  1. Para pode ter acesso ao Swagger da aplicação, foi necessário realizar a configuração dele no arquivo de codificação da API (server.cjs) e realizar a instalação dele no projeto da aplicação a ser testada.
+  2. Ao tentar cadastrar um usuário já cadastrado, não há nenhuma mensagem de erro sendo disparada.
+  3. Não há validação para e-mails inválidos, sendo possível cadastrar com e-mails aleatórios
+  4. Não há validação para senhas, sendo possível adicionar sem qualquer requisto de segurança
+  5. A funcionalidade de "buscas por usuário" na página de "user" não funciona, ela não retorna nenhum usuário
+  6. O índice de exclusão de usuários não está sendo reordenado, uma vez que ao realizar qualquer exclusão o ID do usuário excluído passa para o proximo e isso gera uma duplicidade de ID's.
+  7. A funcionalidade de adição de tickets, na página de "tickets", não está funcionando. Os campos são preenchidos mas o envio do formulário não é realizado.
+  8. A funcionalidade de edição/atualização dos tickets, na página de "tickets", não está funcionando. O botão não realiza nenhuma ação.
