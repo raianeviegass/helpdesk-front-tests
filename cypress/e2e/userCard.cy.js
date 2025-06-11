@@ -1,7 +1,5 @@
 import cadastroPage from '../support/pages/cadastroPage'
-import loginPage from '../support/pages/loginPage'
 import usuariosPage from '../support/pages/usuariosPage'
-import ticketsPage from '../support/pages/ticketsPage'
 
 describe('Suite de Teste que realiza o cadastro e login de usuário cadastrado, criação, atualização e exclusão de usuário', () => {
 

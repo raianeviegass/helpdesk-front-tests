@@ -1,5 +1,3 @@
-import ticketsPage from './ticketsPage'
-
 class UsuariosPage {
 
   nome
