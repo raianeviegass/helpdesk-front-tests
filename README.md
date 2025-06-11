@@ -109,7 +109,7 @@ Esta configuração é feita no arquivo `cypress.config.js`, conforme exemplo ab
 ## Exemplo de Teste com Page Object e Fluent Pages
 
 
-**Estrutura da Página de Cadstro de Usuário**
+**Estrutura da Página de Cadastro de Usuário**
 
 ```javascript     
     import loginPage from './loginPage'
