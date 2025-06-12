@@ -7,13 +7,13 @@ describe('Suite de Teste que realiza a busca e exclusão de tickets', () => {
       .visit()
       .buscarTicketsPorStatus('In Progress')
       .verificarTicketsPorStatus()
-  })
+  });
 
   it('Deve acessar a página de Tickets, selecionar o botão de exclusão de um dos Tickets e validar que o respesctivo Ticket foi excluído com sucesso', () => {
     ticketsPage
       .visit()
       .excluirTicket('The printer is not printing.')
       .verificarTicketExcluido()
-  })
+  });
 
-})
+});
